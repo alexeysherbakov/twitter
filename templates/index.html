@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Twutter</title>
+    <style>
+
+      body{
+        background-image: url('../static/img/bkg.png');
+        width: 1920px;
+        height:1080px;
+        background-position: center center;
+        background-repeat: no-repeat;
+        margin:auto;
+        padding:0;
+        
+      }
+      .input_form{
+        margin: auto;
+        width: 50%;
+        padding: 90px;
+        outline:none;
+      }
+      .post_input{
+        outline:none;
+        border: none;
+      }
+
+      .listing{
+        font-family: 'Roboto', sans-serif;
+        color: white;
+        font-weight: normal;
+        text-decoration: none;
+        outline: 0 none;
+      }
+
+      .post_create_button{
+        color: #1DA1F2;
+      }
+
+      .test{
+        color: red;
+      }
+    </style>
+</head> 
+<body>
+    <center>
+        <form action="/" method="post">
+            <input type="submit" name="submit_button" value="Log Out">
+        </form>
+        
+        <form  class="input_form" action="/new-post" method="post">
+
+            <fieldset class="post_input">
+              <p class="post_input_form">
+                <input type="text" class="title_input_form" id="title_input_form" name="title_input_form" placeholder="The title of the post will be...">
+                <input type="text" class="post_input_form" id="post_input_form" name="post_input_form" placeholder="Write something...">
+                <button type="submit_post" class="post_create_button">Twutt it</button>
+              </p>
+            </fieldset>
+
+          </form>
+
+          {% for postmodel in postmodel_list %}
+          <p class="listing"><span style="color: #1DA1F2;"> Автор: </span> {{postmodel.currauthor }},
+             <span style="color: #1DA1F2;"> Номер: </span> {{postmodel.id }},
+              <span style="color: #1DA1F2;"> Заголовок: </span> {{postmodel.post_title }},
+               <span style="color: #1DA1F2;"> Пост: </span> {{postmodel.post_include }},
+               <a href="{{ url_for('posts', currauthor = currauthor, postmodel_id = postmodel.id)}}">
+                <span style="color: #4d4d4d;">ссылка</span></a>
+          {% endfor %}
+    </center>
+</body>
+</html>
