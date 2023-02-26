@@ -64,12 +64,14 @@
           </form>
 
           {% for postmodel in postmodel_list %}
-          <p class="listing"><span style="color: #1DA1F2;"> Автор: </span> {{postmodel.currauthor }},
-             <span style="color: #1DA1F2;"> Номер: </span> {{postmodel.id }},
-              <span style="color: #1DA1F2;"> Заголовок: </span> {{postmodel.post_title }},
-               <span style="color: #1DA1F2;"> Пост: </span> {{postmodel.post_include }},
-               <a href="{{ url_for('posts', currauthor = postmodel.currauthor, postmodel_id = postmodel.id)}}">
-                <span style="color: #4d4d4d;">ссылка</span></a>
+          <div class="posts">
+            <p class="listing"><span style="color: #1DA1F2;"> Автор: {{postmodel.currauthor }}, </span>
+              <span style="color: #1DA1F2;"> Номер: {{postmodel.id }}, </span>
+               <span style="color: #1DA1F2;"> Заголовок: {{postmodel.post_title }}, </span>
+                <span style="color: #1DA1F2;"> Пост: {{postmodel.post_include }}, </span>
+                <a href="{{ url_for('posts', currauthor = postmodel.currauthor, postmodel_id = postmodel.id)}}">
+                 <span style="color: #4d4d4d;">ссылка</span></a>
+          </div>
           {% endfor %}
     </center>
 </body>
