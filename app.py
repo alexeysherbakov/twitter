@@ -56,13 +56,13 @@ def cookiedelete():
 def reg():
     iusr = request.form.get("iusr")
     ipass = request.form.get("ipass")
-    if iusr and ipass == db.session.query(Userlogpass):
+    if iusr and ipass in db.session.query(Userlogpass):
+        return '<center><h5>account already exists, please log in</h5></center>' + render_template('login.html')
+    else:
         login = Userlogpass(username=iusr, password=ipass)
         db.session.add(login)
         db.session.commit()
         return redirect( url_for('login') )
-    else:
-        return '<center><h5>account already exists, please log in</h5></center>' + render_template('login.html')
     #Функционал регистрации
 
 @app.route("/login", methods = ['POST', 'GET']) 
@@ -100,12 +100,15 @@ def new_post():
 @app.route('/<currauthor>/<int:postmodel_id>/')
 def posts(currauthor, postmodel_id):
     currauthors = db.session.query(Postmodel).filter_by(currauthor = currauthor, id = postmodel_id).first()
-    try: 
-        currauthors.currauthor == currauthor and request.cookies.get('dataxd')
-        return f"<center><h2>Title: {currauthors.post_title} | Post: {currauthors.post_include}</h2></center>" + render_template('posts.html')
-    except:
-        return "<center><h2>Sorry! Try different author or id. Maybe, you have no cookie...</h2></center>" + render_template('posts.html')
-    #Получение ссылок по имени автора + номеру поста
+    if request.cookies.get('dataxd') is None:
+        return '<center><h5>Seems like no cookie for me...</h5></center>'
+    else:       
+        try: 
+            currauthors.currauthor == currauthor and request.cookies.get('dataxd')
+            return f"<center><h2>Title: {currauthors.post_title} | Post: {currauthors.post_include}</h2></center>" + render_template('posts.html')
+        except:
+            return "<center><h2>Sorry! Try different author or id. Maybe, you have no cookie...</h2></center>" + render_template('posts.html')
+        #Получение ссылок по имени автора + номеру поста
 
 if __name__ == '__main__':
     app.run()

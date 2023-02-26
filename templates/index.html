@@ -68,7 +68,7 @@
              <span style="color: #1DA1F2;"> Номер: </span> {{postmodel.id }},
               <span style="color: #1DA1F2;"> Заголовок: </span> {{postmodel.post_title }},
                <span style="color: #1DA1F2;"> Пост: </span> {{postmodel.post_include }},
-               <a href="{{ url_for('posts', currauthor = currauthor, postmodel_id = postmodel.id)}}">
+               <a href="{{ url_for('posts', currauthor = postmodel.currauthor, postmodel_id = postmodel.id)}}">
                 <span style="color: #4d4d4d;">ссылка</span></a>
           {% endfor %}
     </center>
