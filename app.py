@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, make_response, abort
 from flask_sqlalchemy import SQLAlchemy
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 app = Flask(__name__, static_folder='static')
 app.secret_key = 'hellosarpens'
@@ -7,6 +9,13 @@ app.secret_key = 'hellosarpens'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=["200 per day", "50 per hour"],
+    storage_uri="memory://",
+)
 
 
 class Userlogpass(db.Model):
@@ -29,11 +38,12 @@ with app.app_context():
     db.create_all()
 
 @app.route("/")
+@limiter.limit("3/day;10/hour;1/minute")
 def index():
         if request.cookies.get('dataxd') is None:
             return '<center><h1>No cookies</center></h1>'
         elif 'python-requests' in request.headers.get('User-Agent'):
-            return '<center><h1>No User-Agent</center></h1>'
+            return '<center><h1>No cookies</center></h1>'
         else:
             postmodel_list = db.session.query(Postmodel).all()
             print(request.headers.get('User-Agent'))
@@ -76,7 +86,7 @@ def login():
     exists = db.session.query(Userlogpass).filter_by(username=usr["username"], password=usr["password"]).first()
     if exists != None:
         resp = make_response(redirect( url_for('index') ))
-        resp.set_cookie('dataxd', usr['username'], max_age=300000)
+        resp.set_cookie('dataxd', usr['username'], max_age=30)
         return resp
     else :
         return '<center><h5>account not found, sign up instead</h5></center>' + render_template('reg.html')
