@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, make_response
+from flask import Flask, render_template, request, redirect, url_for, make_response, abort
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__, static_folder='static')
@@ -28,11 +28,16 @@ class Postmodel(db.Model):
 with app.app_context():
     db.create_all()
 
-
 @app.route("/")
 def index():
-        postmodel_list = db.session.query(Postmodel).all()
-        return render_template('index.html', postmodel_list=postmodel_list)
+        if request.cookies.get('dataxd') is None:
+            return '<center><h1>No cookies</center></h1>'
+        elif 'python-requests' in request.headers.get('User-Agent'):
+            return '<center><h1>No cookies</center></h1>'
+        else:
+            postmodel_list = db.session.query(Postmodel).all()
+            print(request.headers.get('User-Agent'))
+            return render_template('index.html', postmodel_list=postmodel_list)
     #Главная страница
 
 
