@@ -33,7 +33,7 @@ def index():
         if request.cookies.get('dataxd') is None:
             return '<center><h1>No cookies</center></h1>'
         elif 'python-requests' in request.headers.get('User-Agent'):
-            return '<center><h1>No cookies</center></h1>'
+            return '<center><h1>No User-Agent</center></h1>'
         else:
             postmodel_list = db.session.query(Postmodel).all()
             print(request.headers.get('User-Agent'))
